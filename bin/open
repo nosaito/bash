@@ -1,0 +1,16 @@
+#!/bin/bash -f
+
+
+if [ $# -lt 1 ]; then
+  export b=`pwd`
+else
+  export b=$1
+fi
+
+
+export a=`cygpath -w $b`
+
+
+echo "$a"
+
+explorer $a
