@@ -128,7 +128,8 @@ fi
 export PATH=$base_dir/Program/python3:$base_dir/Program/python3/Scripts:$PATH
 export MSYS=winsymlinks:nativestrict   # use symbolic link (need to be admin)
 #PS1="\[\e[1;34m\][\W/] \$ \[\e[0;37m"
-PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
+#PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
+promps
 
 # if not defined $USERDNSDOMAIN
 if [ ! -z "${USERDNSDOMAIN+x}" ]; then # VARが定義済み(nullを含む)の場合 x が返るので、-z でテストすれば OK
@@ -164,6 +165,37 @@ alias j=". j"
 bind '"\C-o": history-search-forward'
 bind '"\C-p": history-search-backward'
 bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
+
+
+
+
+
+
+#
+# prompt for git
+#
+function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+function promps {
+    # 色は気分で変えたいかもしれないので変す宣言しておく
+    local  BLUE="\[\e[1;34m\]"
+    local  RED="\[\e[1;31m\]"
+    local  GREEN="\[\e[1;32m\]"
+    local  WHITE="\[\e[00m\]"
+    local  GRAY="\[\e[1;37m\]"
+
+    case $TERM in
+        xterm*) TITLEBAR='\[\e]0;\W\007\]';;
+        *)      TITLEBAR="";;
+    esac
+    local BASE="\u@\h"
+    #PS1="${TITLEBAR}${GREEN}${BASE}${WHITE}:${BLUE}\W${GREEN}\$(parse_git_branch)${BLUE}\$${WHITE} "
+    PS1="${BLUE}[\w/]${GREEN}\$(parse_git_branch) ${BLUE}\$ ${GRAY}"
+}
+
+
+
 
 
 # Umask
