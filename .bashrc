@@ -112,13 +112,15 @@ alias jp='export LANG=ja_JP.UTF-8'
 alias euc='export LANG=ja_JP.eucJP'
 alias sjis='export LANG=ja_JP.sjis'
 
+alias wget='wget -e HTTPS_PROXY=http://goproxy.micron.com:8080'
+
 export conemu_dir=`cygpath -u $ConEmuWorkDir`
 export base_dir="$CMDER_ROOT/../../"
 export primary_dir="$CMDER_ROOT/../Primary"
 
 export PATH=.:$PATH
 export PATH=$CMDER_ROOT/tool/bin:~/bin:$PATH
-#export PATH=/C/Utility/Program/MinGW/msys/1.0/bin:$PATH
+export PATH=$CMDER_ROOT/../msys64/usr/bin:$PATH
 if [ -d "/C/MTApps" ]; then
   export PATH=/C/MTApps/PERL/5.10.0/Prod/Bin:$PATH
 else
@@ -127,9 +129,32 @@ fi
 
 export PATH=$base_dir/Program/python3:$base_dir/Program/python3/Scripts:$PATH
 export MSYS=winsymlinks:nativestrict   # use symbolic link (need to be admin)
+
+
+#
+# Prompt setting
+#
+
+# http://tm.root-n.com/unix:command:git:bash_prompt
+#
+#if [ -f ~/bin/git-completion.bash ]; then
+#    source ~/bin/git-completion.bash
+#fi
+#if [ -f ~/bin/git-prompt.sh ]; then
+#    source ~/bin/git-prompt.sh
+#fi
+#GIT_PS1_SHOWDIRTYSTATE=true
+#GIT_PS1_SHOWUNTRACKEDFILES=true
+#GIT_PS1_SHOWSTASHSTATE=true
+#GIT_PS1_SHOWUPSTREAM=auto
+
 #PS1="\[\e[1;34m\][\W/] \$ \[\e[0;37m"
 #PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
+#PS1="\[\033[1;32m\]\$(date +%Y/%m/%d_%H:%M:%S)\[\033[0m\] \[\033[33m\]\H:\w\n\[\033[0m\][\u@ \W]\[\033[36m\]\$(__git_ps1)\[\033[00m\]\$ "
+
 promps
+
+
 
 # if not defined $USERDNSDOMAIN
 if [ ! -z "${USERDNSDOMAIN+x}" ]; then # VARが定義済み(nullを含む)の場合 x が返るので、-z でテストすれば OK
@@ -175,10 +200,10 @@ bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
 # prompt for git
 #
 function parse_git_branch {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 function promps {
-    # 色は気分で変えたいかもしれないので変す宣言しておく
+    # 色は気分で変えたいかもしれないので変数宣言しておく
     local  BLUE="\[\e[1;34m\]"
     local  RED="\[\e[1;31m\]"
     local  GREEN="\[\e[1;32m\]"
@@ -191,9 +216,8 @@ function promps {
     esac
     local BASE="\u@\h"
     #PS1="${TITLEBAR}${GREEN}${BASE}${WHITE}:${BLUE}\W${GREEN}\$(parse_git_branch)${BLUE}\$${WHITE} "
-    PS1="${BLUE}[\w/]${GREEN}\$(parse_git_branch) ${BLUE}\$ ${GRAY}"
+    PS1="${BLUE}[\w/]${GREEN}\$(parse_git_branch)${BLUE}\$ ${GRAY}"
 }
-
 
 
 
