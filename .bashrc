@@ -149,10 +149,10 @@ export MSYS=winsymlinks:nativestrict   # use symbolic link (need to be admin)
 #GIT_PS1_SHOWUPSTREAM=auto
 
 #PS1="\[\e[1;34m\][\W/] \$ \[\e[0;37m"
-#PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
+PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
 #PS1="\[\033[1;32m\]\$(date +%Y/%m/%d_%H:%M:%S)\[\033[0m\] \[\033[33m\]\H:\w\n\[\033[0m\][\u@ \W]\[\033[36m\]\$(__git_ps1)\[\033[00m\]\$ "
 
-promps
+#promps
 
 
 
@@ -181,7 +181,8 @@ alias eee="${base_dir}/Program/SublimeText3/sublime_text.exe"
 #alias open="explorer.exe $PWD &"
 alias mklink="cmd.exe /c mklink"
 alias ..='cd ..'
-alias path='echo -e ${PATH//:/\\n}'
+#alias path='echo -e ${PATH//:/\\n}'
+alias path='echo $PATH | tr ":" "\n"'
 alias grep='grep --color'
 alias bindkey="bind -p | egrep -v '^#|self-insert|do-lowercase-version|digit-argument'"
 
@@ -192,8 +193,27 @@ bind '"\C-p": history-search-backward'
 bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
 
 
-
-
+#
+# pathの重複を削除
+# http://qiita.com/key-amb/items/ce39b0c85b30888e1e3b
+#
+_path=""
+for _p in $(echo $PATH | tr ':' ' '); do
+  case ":${_path}:" in
+    *:"${_p}":* )
+      ;;
+    * )
+      if [ "$_path" ]; then
+        _path="$_path:$_p"
+      else
+        _path=$_p
+      fi
+      ;;
+  esac
+done
+PATH=$_path
+unset _p
+unset _path
 
 
 #
@@ -202,6 +222,7 @@ bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
 function parse_git_branch {
     git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
+
 function promps {
     # 色は気分で変えたいかもしれないので変数宣言しておく
     local  BLUE="\[\e[1;34m\]"
