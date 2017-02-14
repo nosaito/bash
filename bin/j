@@ -14,7 +14,7 @@ DIR=( \
   ["home"]="C:\\Users\\$USERNAME" \
   ["startup"]="C:\\Users\\${USERNAME}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup" \
   ["startup2"]="C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup" \
-  ["win"]="C:\\$WINDIR"
+  ["win"]="$WINDIR"
 )
 
 
@@ -28,8 +28,14 @@ else
 
     if [ "${2:-UNDEF}" = "p" ]; then
       pushd "${DIR[$1]}"
+
+    elif [ "${2:-UNDEF}" = "o" ]; then
+      export a=`cygpath -w ${DIR[$1]}`
+      explorer $a
+
     else
       cd "${DIR[$1]}"
+
     fi
 
   else
@@ -41,11 +47,12 @@ fi
 
 
 
+
 #
 #
 #
 help () {
-  echo "usage: j <alias> [p] (p: cd by pushd)"
+  echo "usage: j <alias> [p] [o] (p: cd by pushd; o:open by explorer)"
   echo "alias list:"
   for i in ${!DIR[@]}; do
     echo "  ${i} => [${DIR[$i]}] "

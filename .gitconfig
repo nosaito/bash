@@ -1,0 +1,16 @@
+[http]
+	proxy = http://goproxy.micron.com:8080
+[https]
+	proxy = http://goproxy.micron.com:8080
+[url "https://"]
+	insteadOf = git://
+[user]
+	name = N.Saito
+	email = nytenderberry@gmail.com
+[core]
+	quotepath = false
+	editor = micro
+[color]
+	diff = auto
+	status = auto
+	branch = auto
