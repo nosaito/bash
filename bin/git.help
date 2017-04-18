@@ -1,0 +1,140 @@
+
+
+＃＃＃コマンド一覧
+git status               # ステータスを表示
+git add [file_pattern]   # ファイル/ディレクトリを追加
+git add test.pl
+git add *.css            # すべてのCSSファイル
+git add -A               # 新規作成/変更/削除されたファイル全てを追加(AllのA)
+git add -u               # 変更/削除されたファイルを追加。新規作成は対象外。(updateのu)
+git add .                # 新規作成/変更されたファイルを追加。削除は対象外。
+git commit -am "comment" # 変更のあったファイルすべて
+git commit -m  "comment" #
+git push origin master   # ローカルリポジトリをリモートにプッシュして反映させる
+
+git rm <file>            # fileをワークツリーとステージングエリアから削除
+git mv hoge.txt piyo.txt # 名称変更と場所移動。ワークツリーとステージングエリアに反映
+
+
+git init                 # カレントディレクトリのgit管理を開始する。
+git branch
+git checkout
+git log
+git grep "word"
+git clone [url]          # リモートリポジトリの内容をローカルに落とす url例: https://github.com/jquery/jquery.git
+
+
+
+※repositoryがtest2の場合:
+repositoryのurl: https://github.com/nosaito/test2.git
+
+repository:
+https://github.com/nosaito/bash_bin.git
+
+
+1. ローカルリポジトリを作成
+  mkdir test2
+  cd test2
+  git init
+
+2. リモートリポジトリ情報を登録
+  git remote add origin https://github.com/nosaito/test2.git
+  git remote -vで表示できる。
+
+2. id/passを聞かれないように:
+  やり方(1):
+　　git remote set-url origin https://nosaito:xxxxxx@github.com/nosaito/test2.git
+
+　　上記はすでにgit remoteで設定済の場合。新規の場合はたぶんgit remote addで直接指定できると思う。
+　　例: git remote add origin https://nosaito:xxxxxx@github.com/nosaito/test2.git
+
+  やり方(2):
+    _netrcファイル(下記)にユーザー名をpassを指定する。
+    windowsの場合はC:\Users\ユーザー名\netrc。linuxの場合は~/.netrc.
+    ------------------------
+    machine github.com
+    login ユーザー名
+    password パスワード
+    ----------------------
+
+"SSHに変更したい場合
+$ git remote set-url origin git@github. com:ユーザー名/Hello-World.git
+
+"HTTPSに変更したい場合
+$ git remote set-url origin https://github.com/ユーザー名/Hello-World.git
+
+3. proxy設定
+  git config --global http.proxy http://goproxy.micron.com:8080
+  git config --global https.proxy http://goproxy.micron.com:8080
+  git config --global url."https://".insteadOf git://
+  git config --global credential.helper cache                    # パスワードを一定時間記憶 うまく動かない　上記のやり方で。
+  git config --global credential.helper 'cache --timeout=3600'   # パスワード記憶時間を設定 うまく動かない　上記のやり方で。
+
+  git config --global user.name "N.Saito"
+  git config --global user.email "nytenderberry@gmail.com"
+  git config --global core.quotepath false # git status とかで表示される日本語ファイル名がエスケープされてうざいので
+  git config --global gui.encoding utg-8 # 文字化けある場合
+  git config --global core.editor micro  # エディタ設定
+
+  git config --list   # 設定を確認
+  cat ~/.gitconfig    # 設定を確認
+
+
+
+4. ファイルを追加 (test.pl)
+  git add test.pl
+  git add *.css # すべてのCSSファイル
+  git add -A    # 新規作成/変更/削除されたファイル全てを追加(AllのA)
+  git add -u    # 変更/削除されたファイルを追加。新規作成は対象外。(updateのu)
+  git add .     # 新規作成/変更されたファイルを追加。削除は対象外。
+  git reset HEAD  aaa.txt // aaa.txtのaddを取り消し。ファイル指定ないと全部?
+  git rm --cached aaa.txt // aaa.txtのaddを取り消し。-cachedがないとファイルそのものが消されるので注意
+
+5. ファイルをローカルリポジトリにコミット
+  git commit [-a] -m "add new file"  # -aオプションは変更を自動検出してくれる
+  git commit -a      //変更のあったファイルすべて
+  git commit --amend //直前のコミットを取り消す
+  git commit -v      //変更点を表示してコミット
+
+  git status   # ステータス確認
+
+6. ローカルリポジトリをリモートにプッシュして反映させる
+  git push origin master   # user/passを聞かれる。
+
+
+7. ホームディレクトリ直下にcloneする。レポジトリ名のディレクトリが生成されて
+　その中にダウンロードされる。
+  % cd ~
+  # SSHで接続したい場合は以下のコマンドで！
+  % git clone git@github. com:ユーザー名/Hello-World.git
+
+  # HTTPSで接続したい場合は以下のコマンドで！
+  % git clone https://github. com/ユーザー名/Hello-World.git
+
+8. diff
+  git diff --stat      // 最新のcommitとローカルファイルを比較してどのファイルが変更されているかを確認
+  git diff --name-only // 最新のcommitとローカルファイルを比較してどのファイルが変更されているかを確認
+  git diff HEAD^       // git commitした後にコミットした箇所を表示(「最新のコミット」と「最新のプッシュのひとつ前」との差分)
+  git diff HEAD..master // ローカルの最新コミットとpull先のリモートリポジトリを比較。pullする前に使う。
+  git diff master..HEAD // リモートリポジトリとローカルの最新コミットを比較。pushする前に使う
+  ※.. の右側に新しいリポジトリを指定する。
+
+  master        // ローカルリポジトリの最新。ブランチの名前
+  origin/master // リモートリポジトリの最新
+  origin        // レポジトリの場所(URL)の別名
+  HEAD          //
+  指定がない場合はorigin masterになる。例: "git pull" = "git pull origin master"
+
+
+
+
+○ブランチ
+  ブランチとは? サルでも分かるGit入門 - http://www.backlog.jp/git-guide/stepup/stepup1_1.html
+git branch [branch_name]  //ブランチの作成
+git checkout [branch_name]  //ブランチの移動
+git branch -d [branch_name]  //ブランチの削除
+git branch -m [branch_name]  //現在のブランチ名の変更
+git branch // ローカルブランチの一覧
+git branch -a //リモートとローカルのブランチの一覧
+git branch -r //リモートブランチの一覧
+git checkout -b branch_name origin/branch_name //リモートブランチへチェックアウト
