@@ -116,11 +116,16 @@ alias wget='wget -e HTTPS_PROXY=http://goproxy.micron.com:8080'
 
 export conemu_dir=`cygpath -u $ConEmuWorkDir`
 export base_dir="$CMDER_ROOT/../../"
-export primary_dir="$CMDER_ROOT/../Primary"
+export primary_dir="$CMDER_ROOT/../../Primary"
 
+
+#
+# set path
+#
 export PATH=.:$PATH
 export PATH=$CMDER_ROOT/tool/bin:~/bin:$PATH
 export PATH=$CMDER_ROOT/../msys64/usr/bin:$PATH
+export PATH=$primary_dir/Tool/7zip/App/7-Zip64:$PATH
 if [ -d "/C/MTApps" ]; then
   export PATH=/C/MTApps/PERL/5.10.0/Prod/Bin:$PATH
 else
