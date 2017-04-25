@@ -99,13 +99,13 @@ alias egrep='egrep --color=auto'              # show differences in colour
 alias fgrep='fgrep --color=auto'              # show differences in colour
 #
 # Some shortcuts for different directory listings
-alias ls='ls -hF --color=tty'                 # classify files in colour
+alias ls='ls -h --color=tty'                 # classify files in colour
 #alias ls='ls -hF'                 # classify files in colour
 alias dir='ls --color=auto --format=vertical'
 alias dirs='dirs -v'
 alias vdir='ls --color=auto --format=long'
-alias ll='ls -la'                              # long list
-alias la='ls -A'                              # all but . and ..
+alias ll='ls -l'                              # long list
+alias la='ls -la'                              # all but . and ..
 alias l='ls -CF'                              #
 alias us='export LANG=en_US.UTF-8'
 alias jp='export LANG=ja_JP.UTF-8'
@@ -113,6 +113,38 @@ alias euc='export LANG=ja_JP.eucJP'
 alias sjis='export LANG=ja_JP.sjis'
 
 alias wget='wget -e HTTPS_PROXY=http://goproxy.micron.com:8080'
+
+# alias for git
+alias gs='git status'
+alias gls='git ls-files'
+alias gcommit='git commit -a'
+alias gupload='git push origin master'
+
+
+#alias e="${primary_dir}/Editor/sakura/sakura.exe"
+alias e="micro"
+alias kate="${primary_dir}/Editor/sakura/sakura.exe"
+alias edit="${primary_dir}/Editor/sakura/sakura.exe"
+alias ee="${base_dir}/Program/Atom/atom.exe"
+alias e1="${base_dir}/Program/Atom/atom.exe"
+alias eee="${base_dir}/Program/SublimeText3/sublime_text.exe"
+alias e2="${base_dir}/Program/SublimeText3/sublime_text.exe"
+alias e3="${base_dir}/Program/VSCode/Code.exe"
+#alias open='explorer.exe `cygpath -a -m $PWD` &'
+#alias open="explorer.exe $PWD &"
+alias mklink="cmd.exe /c mklink"
+alias ..='cd ..'
+#alias path='echo -e ${PATH//:/\\n}'
+alias path='echo $PATH | tr ":" "\n"'
+alias grep='grep --color'
+alias bindkey="bind -p | egrep -v '^#|self-insert|do-lowercase-version|digit-argument'"
+
+alias j=". j"
+
+bind '"\C-o": history-search-forward'
+bind '"\C-p": history-search-backward'
+bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
+
 
 export conemu_dir=`cygpath -u $ConEmuWorkDir`
 export base_dir="$CMDER_ROOT/../../"
@@ -133,6 +165,7 @@ else
 fi
 
 export PATH=$base_dir/Program/python3:$base_dir/Program/python3/Scripts:$PATH
+#export PATH=$base_dir/Program/python27:$base_dir/Program/python27/Scripts:$PATH
 export MSYS=winsymlinks:nativestrict   # use symbolic link (need to be admin)
 
 
@@ -161,7 +194,7 @@ PS1="\[\e[1;34m\][\w/] \$ \[\e[0;37m"
 
 
 
-# if not defined $USERDNSDOMAIN
+# if not defined $USERDNSDOMAIN - micron environment
 if [ ! -z "${USERDNSDOMAIN+x}" ]; then # VARが定義済み(nullを含む)の場合 x が返るので、-z でテストすれば OK
   export HTTP_PROXY='http://goproxy.micron.com:8080'
   export HTTPS_PROXY='http://goproxy.micron.com:8080'
@@ -172,30 +205,6 @@ fi
 #export common_dir="C:\\Utility"
 #export conemu_dir=${ConEmuWorkDir//\\/\/}    # replace "\" -> "/"
 #export conemu_dir=/c${conemu_dir#*:}            # remove ":"
-
-
-
-
-#alias e="${primary_dir}/Editor/sakura/sakura.exe"
-alias e="micro"
-alias kate="${primary_dir}/Editor/sakura/sakura.exe"
-alias edit="${primary_dir}/Editor/sakura/sakura.exe"
-alias ee="${base_dir}/Program/Atom/atom.exe"
-alias eee="${base_dir}/Program/SublimeText3/sublime_text.exe"
-#alias open='explorer.exe `cygpath -a -m $PWD` &'
-#alias open="explorer.exe $PWD &"
-alias mklink="cmd.exe /c mklink"
-alias ..='cd ..'
-#alias path='echo -e ${PATH//:/\\n}'
-alias path='echo $PATH | tr ":" "\n"'
-alias grep='grep --color'
-alias bindkey="bind -p | egrep -v '^#|self-insert|do-lowercase-version|digit-argument'"
-
-alias j=". j"
-
-bind '"\C-o": history-search-forward'
-bind '"\C-p": history-search-backward'
-bind '"\C-w": backward-kill-word'  # default: unix-word-rubout
 
 
 #
@@ -330,3 +339,18 @@ function promps {
 # }
 #
 # alias cd=cd_func
+
+
+
+#
+# 下記でシンボリックリンクがネットワークドライブに使えるか調べられる。(admin権限必要)
+#
+# > fsutil behavior query symlinkevaluation
+# ローカルからローカルへのシンボリック リンクは有効です。
+# ローカルからリモートへのシンボリック リンクは有効です。
+# リモートからローカルへのシンボリック リンクは無効です。
+# リモートからリモートへのシンボリック リンクは無効です。
+#
+# 上記で下記２つが無効の場合は下記コマンドで有効にできる。
+# fsutil behavior set symlinkevaluation r2r:1 r2l:1
+#
